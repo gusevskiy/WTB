@@ -6,7 +6,7 @@ import sqlite3
 
 
 
-# # connect db
+# connect db
 try:
     con = sqlite3.connect('translateWord.db')
     table_db = '''CREATE TABLE IF NOT EXISTS words (
