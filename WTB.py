@@ -23,9 +23,15 @@ except sqlite3.Error as error:
 
 
 def print_word():
+    translate_word.delete(0, END)
     print("В базе имеются такие слова")
+    a = []
     for value in cur.execute("SELECT word, translate FROM words;"):
-        translate_word.insert(1.0, value, '/n') 
+        #translate_word.insert(END, value)
+        a.append(value) 
+    a.sort()
+    for i in a:
+        translate_word.insert(END, i[0]+'-'+i[1])
         
         
 
@@ -38,13 +44,14 @@ def add():
         
         cur.execute("SELECT word FROM words;")
         rows = cur.fetchall()
-        if (word,) in rows:
+        if word in rows:
             print('Такая запись уже есть!')
         else:
             cur.execute(f'''INSERT INTO words (word, translate) VALUES ('{w}', '{t}');''')
             con.commit()
             print(f"A word has been added to the word table, {w}")
             clear_entry()
+            print_word()
     except:
         return None
 
@@ -57,6 +64,7 @@ def delite_word():
     cur.execute("DELETE FROM words WHERE id = (SELECT MAX(id) FROM words);")
     print('Delete word')
     con.commit()
+    print_word()
     
 # con.close()
 
@@ -73,11 +81,13 @@ word.grid(column=1, row=0, columnspan = 3, sticky=S, pady=(5,0),padx=(2,0))
 translate = Entry(root, width=20)
 translate.grid(column=1, row=1, columnspan = 3, sticky=S, pady=(5,0),padx=(2,0))
 
-create = Button(root, text='save', command= add).grid(column=0, row=2, sticky=S, pady=(5,0),padx=(2,0))
+create = Button(root, text='add', command= add).grid(column=0, row=2, sticky=S, pady=(5,0),padx=(2,0))
 delete = Button(root, text='delete', command= delite_word).grid(column=1, row=2, sticky=S, pady=(5,0),padx=(2,0))
 printW = Button(root, text='print', command= print_word).grid(column=2, row=2, columnspan=3, sticky=S, pady=(5,0),padx=(2,0))
 
-translate_word = Text(root, height=30, width=30)
+
+translate_word = Listbox(root, height=30, width=30)
+
 translate_word.grid(column=0, row=4, columnspan=4, sticky=S, pady=(5,0),padx=(2,0))
 
 
