@@ -61,10 +61,12 @@ def clear_entry():
   
 #Delete word  
 def delite_word():
-    cur.execute("DELETE FROM words WHERE id = (SELECT MAX(id) FROM words);")
-    print('Delete word')
-    con.commit()
-    print_word()
+    selection = translate_word.curselection()
+    translate_word.delete(selection[0])
+    # cur.execute("DELETE FROM words WHERE id = (SELECT MAX(id) FROM words);")
+    # print('Delete word')
+    # con.commit()
+    # print_word()
     
 # con.close()
 
