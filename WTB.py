@@ -1,74 +1,47 @@
-from cProfile import label
-from cgitb import text
 from tkinter import *
-import sqlite3
-
-
-
-
-# connect db
-try:
-    con = sqlite3.connect('translateWord.db')
-    table_db = '''CREATE TABLE IF NOT EXISTS words (
-                        id integer primary key AUTOINCREMENT,
-                        word varchar(50),
-                        translate varchar(50));'''                 
-    cur = con.cursor()
-    print("Connected to DB translateWord")
-    cur.execute(table_db)
-    con.commit()
-    
-except sqlite3.Error as error:
-    print('Error connect!')
 
 
 def print_word():
-    translate_word.delete(0, END)
-    print("В базе имеются такие слова")
-    a = []
-    for value in cur.execute("SELECT word, translate FROM words;"):
-        #translate_word.insert(END, value)
-        a.append(value) 
-    a.sort()
-    for i in a:
-        translate_word.insert(END, i[0]+'-'+i[1])
+    list_word.delete(0, END)
+    file = open("word_translate.txt", "r", encoding="utf-8")
+    for i in file:
+        list_word.insert(END, i)
         
-        
-
-
 # add words in db    
 def add():
-    try:
-        w = word.get()
-        t = translate.get()
-        
-        cur.execute("SELECT word FROM words;")
-        rows = cur.fetchall()
-        if word in rows:
-            print('Такая запись уже есть!')
-        else:
-            cur.execute(f'''INSERT INTO words (word, translate) VALUES ('{w}', '{t}');''')
-            con.commit()
-            print(f"A word has been added to the word table, {w}")
-            clear_entry()
-            print_word()
-    except:
-        return None
-
+    list = []
+    with open('word_translate.txt', 'r', encoding='utf-8') as file:
+        data = file.read().splitlines()
+        data.sort()
+        for i in data:
+            list.append(i)
+    w = word.get()
+    t = translate.get()
+    list.append(w+'-'+t)
+    list.sort()
+    with open('word_translate.txt', 'w', encoding='utf-8') as file:
+        for i in list:
+            file.write(i+'\n')
+    print_word()
+    clear_entry()
+  
 def clear_entry():
     word.delete(0, END)
     translate.delete(0, END)
   
-#Delete word  
+
 def delite_word():
-    selection = translate_word.curselection()
-    translate_word.delete(selection[0])
-    # cur.execute("DELETE FROM words WHERE id = (SELECT MAX(id) FROM words);")
-    # print('Delete word')
-    # con.commit()
-    # print_word()
-    
-# con.close()
+    with open('word_translate.txt', 'w', encoding='utf-8') as file:
+        file.writelines('\n'.join(list_word.get(0, END)))
+           
+    # del_word = list_word.curselection()
+    # list_word.delete(del_word[0])
+    # data = list_word
+    # print(data)
+    # with open('word_translate.txt', 'w', encoding='utf-8') as file:
+    #     file.writelines(data)
+        
+  
 
 root = Tk()
 root.title('dictionary WTB')
@@ -88,9 +61,9 @@ delete = Button(root, text='delete', command= delite_word).grid(column=1, row=2,
 printW = Button(root, text='print', command= print_word).grid(column=2, row=2, columnspan=3, sticky=S, pady=(5,0),padx=(2,0))
 
 
-translate_word = Listbox(root, height=30, width=30)
+list_word = Listbox(root, height=30, width=30)
 
-translate_word.grid(column=0, row=4, columnspan=4, sticky=S, pady=(5,0),padx=(2,0))
+list_word.grid(column=0, row=4, columnspan=4, sticky=S, pady=(5,0),padx=(2,0))
 
 
 root.mainloop()
