@@ -56,11 +56,13 @@ def clear_entry():
         
 root = Tk()
 root.title('dictionary WTB')
-root.geometry('200x500+50+50')
-
+root.geometry('200x350+50+50')
 
 Label(root, text = 'word')     .grid(column=0, row=0, sticky=S, pady=(5,0),padx=(2,0))
 Label(root, text = 'translate').grid(column=0, row=1, sticky=S, pady=(5,0),padx=(2,0))
+
+scroll_bar = Scrollbar(root)
+scroll_bar.grid(column=4,row=4, sticky='ns')
 
 word = Entry(root, width=20)
 word.grid(column=1, row=0, columnspan = 3, sticky=S, pady=(5,0),padx=(2,0))
@@ -72,10 +74,10 @@ delete = Button(root, text='delete', command= delite_word).grid(column=1, row=2,
 printW = Button(root, text='print', command= print_word).grid(column=2, row=2, sticky=S, pady=(5,0),padx=(2,0))
 printW = Button(root, text='save', command= save_word).grid(column=3, row=2, sticky=S, pady=(5,0),padx=(2,0))
 
-
-list_word = Listbox(root, height=30, width=30, selectmode=EXTENDED)
-
+list_word = Listbox(root, height=15, width=30, selectmode=EXTENDED)
 list_word.grid(column=0, row=4, columnspan=4, sticky=S, pady=(5,0),padx=(2,0))
+list_word.config(yscrollcommand = scroll_bar.set)
+scroll_bar.config(command=list_word.yview)
 
 
 root.mainloop()
