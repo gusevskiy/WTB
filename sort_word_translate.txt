@@ -1,27 +1,33 @@
-
-
-defines-определяет
-her-оно
-him-его
-how-как
-how-сколько
-in-в
-it-оно
-it-оно
-its-его
-make-делать
-mine-мой
-notice-уведомление, обращать внимание
-on-на
-our-наш
-that-тот
-them-их
-ther-их
-these-эти
-this-этот/это
-those-те
-was-был
-were-были
-which-который
-who-кто
-whose-чья
+-carries - нести, вынести, перенести
+-correct - правельный
+-defines - определяет
+-guide - руководство
+-her - оно
+-him - его
+-how - как
+-how - сколько
+-include - включать, входить
+-is - является, происходить
+-it - оно
+-its - его
+-list - список
+-make - делать
+-may - может
+-mine - мой
+-need - необходимость
+-notice - уведомление, обращать внимание
+-on - на
+-our - наш
+-out - из
+-outdated - устаревший
+-overview - обзор, анализ
+-stash - прятать, копить, тайник
+-that - тот
+-their - их
+-them - их
+-there - там, здесь, туда
+-these - эти
+-this - этот/это
+-those - те
+-updated - обновленный
+-view - вид
