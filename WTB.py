@@ -1,13 +1,22 @@
-from posixpath import split
 from tkinter import *
 
 
 def print_word():
-    sort()
-    list_word.delete(0, END)
-    file = open("word_translate.txt", "r", encoding="utf-8")
-    for i in file:
-        list_word.insert(END, i)
+    if letter.get() == '':
+        sort()
+        list_word.delete(0, END)
+        with open("word_translate.txt", "r", encoding="utf-8") as file:
+            for i in file:
+                list_word.insert(END, i)
+    else:
+        list_word.delete(0,END)
+        let = letter.get()
+        with open('word_translate.txt', 'r', encoding='utf-8') as file:
+            for i in file:
+                if i.startswith(let):
+                    list_word.insert(END, i)
+        letter.delete(0, END)
+        
         
 def one():
     infile = open('word_translate.txt', 'r', encoding="utf-8") 
@@ -40,7 +49,7 @@ def save_word():
         t = translate.get()
         wt = w + ' - ' + t
         f = open('word_translate.txt', 'a', encoding='utf-8')
-        f.writelines('-'+wt)
+        f.writelines(wt)
         f.close()
         clear_entry()
         print_word()
@@ -76,9 +85,9 @@ word = Entry(root, width=30)
 word.grid(column=1, row=0, sticky=S, pady=(5,0),padx=(2,0))
 translate = Entry(root, width=30)
 translate.grid(column=1, row=1, sticky=S, pady=(5,0),padx=(2,0))
+letter = Entry(root, width=2)
+letter.grid(column=1, row=2, pady=(5,0),padx=(2,0))
 
-#create = Button(root, text='sort', command= sort).grid(column=0, row=2, sticky=S, pady=(5,0),padx=(2,0))
-#delete = Button(root, text='delete', command= delite_word).grid(column=1, row=2, sticky=S, pady=(5,0),padx=(2,0))
 print_bottum = Button(root, text='print', command= print_word, height=1, width=8)
 print_bottum.grid(column=1, row=2, sticky=E, pady=(5,0),padx=(2,0))
 save_bottom = Button(root, text='save', command= save_word, height=1, width=8)
