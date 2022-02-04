@@ -1,94 +1,94 @@
-from cProfile import label
-from cgitb import text
 from tkinter import *
-import sqlite3
-
-
-
-
-# connect db
-try:
-    con = sqlite3.connect('translateWord.db')
-    table_db = '''CREATE TABLE IF NOT EXISTS words (
-                        id integer primary key AUTOINCREMENT,
-                        word varchar(50),
-                        translate varchar(50));'''                 
-    cur = con.cursor()
-    print("Connected to DB translateWord")
-    cur.execute(table_db)
-    con.commit()
-    
-except sqlite3.Error as error:
-    print('Error connect!')
 
 
 def print_word():
-    translate_word.delete(0, END)
-    print("В базе имеются такие слова")
-    a = []
-    for value in cur.execute("SELECT word, translate FROM words;"):
-        #translate_word.insert(END, value)
-        a.append(value) 
-    a.sort()
-    for i in a:
-        translate_word.insert(END, i[0]+'-'+i[1])
+    if letter.get() == '':
+        #sort()
+        list_word.delete(0, END)
+        with open("word_translate.txt", "r", encoding="utf-8") as file:
+            for i in file:
+                list_word.insert(END, i)
+    else:
+        list_word.delete(0,END)
+        let = letter.get()
+        with open('word_translate.txt', 'r', encoding='utf-8') as file:
+            for i in file:
+                if i.startswith(let): #если строка в файле начинается на let вывод ее в list_word т.е. на экран
+                    list_word.insert(END, i)
+        letter.delete(0, END)
         
-        
-
-
-# add words in db    
-def add():
-    try:
+def save_word():
+    if word.get() == '' and translate.get() == '':
+        print_word()
+        return None
+    
+    else:
+        words = []
+        with open('word_translate.txt', 'r', encoding='utf-8') as f:
+            for i in f:
+                words.append(i)
         w = word.get()
         t = translate.get()
-        
-        cur.execute("SELECT word FROM words;")
-        rows = cur.fetchall()
-        if word in rows:
-            print('Такая запись уже есть!')
-        else:
-            cur.execute(f'''INSERT INTO words (word, translate) VALUES ('{w}', '{t}');''')
-            con.commit()
-            print(f"A word has been added to the word table, {w}")
-            clear_entry()
-            print_word()
-    except:
-        return None
+        wt = w + ' - ' + t
+        words.append(wt+'\n')
+        words.sort()
+        with open('word_translate.txt', 'w', encoding='utf-8') as f:
+            for i in words:
+                f.write(i)
+        clear_entry()
+        print_word()
+
+def delite_word():
+    word = list_word.get(ANCHOR)
+    sd = []
+    with open('word_translate.txt', 'r', encoding='utf-8') as f:
+        for i in f:
+            sd.append(i)
+    sd.remove(word)
+    with open('word_translate.txt', 'w', encoding='utf-8') as f:
+            for i in sd:
+                f.write(i)
+    print_word()
+
+def del_keyboard(self):# функция специально для кнопки Delete
+    delite_word()
+    
+def enter_perform(self):# функция специально для кнопки Enter
+    save_word()    
 
 def clear_entry():
     word.delete(0, END)
     translate.delete(0, END)
-  
-#Delete word  
-def delite_word():
-    cur.execute("DELETE FROM words WHERE id = (SELECT MAX(id) FROM words);")
-    print('Delete word')
-    con.commit()
-    print_word()
     
-# con.close()
-
+        
 root = Tk()
 root.title('dictionary WTB')
-root.geometry('300x300+50+50')
-
+root.geometry('350x900+50+50')
 
 Label(root, text = 'word')     .grid(column=0, row=0, sticky=S, pady=(5,0),padx=(2,0))
 Label(root, text = 'translate').grid(column=0, row=1, sticky=S, pady=(5,0),padx=(2,0))
+Label(root, text = 'search for a word').grid(column=0, row=2, sticky=S, pady=(5,0),padx=(2,0))
 
-word = Entry(root, width=20)
-word.grid(column=1, row=0, columnspan = 3, sticky=S, pady=(5,0),padx=(2,0))
-translate = Entry(root, width=20)
-translate.grid(column=1, row=1, columnspan = 3, sticky=S, pady=(5,0),padx=(2,0))
+scroll_bar = Scrollbar(root)
+scroll_bar.grid(column=3,row=3, sticky='ns')
 
-create = Button(root, text='add', command= add).grid(column=0, row=2, sticky=S, pady=(5,0),padx=(2,0))
-delete = Button(root, text='delete', command= delite_word).grid(column=1, row=2, sticky=S, pady=(5,0),padx=(2,0))
-printW = Button(root, text='print', command= print_word).grid(column=2, row=2, columnspan=3, sticky=S, pady=(5,0),padx=(2,0))
+word = Entry(root, width=36)
+word.grid(column=1, row=0, sticky=W, pady=(5,0),padx=(2,0))
+translate = Entry(root, width=36)
+translate.grid(column=1, row=1, sticky=W, pady=(5,0),padx=(2,0))
+letter = Entry(root, width=10)
+letter.grid(column=1, row=2, sticky=W, pady=(5,0),padx=(2,0))
 
+save_bottom = Button(root, text='perform', command= save_word, height=1, width=20)
+save_bottom.grid(column=1, row=2, sticky=E, pady=(5,0),padx=(2,0))
 
-translate_word = Listbox(root, height=30, width=30)
+root.bind('<Delete>', del_keyboard)
+root.bind('<Return>', enter_perform)
 
-translate_word.grid(column=0, row=4, columnspan=4, sticky=S, pady=(5,0),padx=(2,0))
+list_word = Listbox(root, height=42, width=45, selectmode=SINGLE, selectborderwidth=2, font=('Consolas', '9'))
+list_word.grid(column=0, row=3, columnspan=2, pady=1,padx=1, ipadx=1, ipady=1)
+list_word.config(yscrollcommand = scroll_bar.set)
+scroll_bar.config(command=list_word.yview)
 
 
 root.mainloop()
