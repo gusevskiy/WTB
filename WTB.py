@@ -39,13 +39,16 @@ def save_word():
         print_word()
 
 def delite_word():
-    del_word = list(list_word.curselection())
-    del_word.reverse()
-    for i in del_word:
-        list_word.delete(i)
-    f = open('word_translate.txt', 'w', encoding='utf-8')
-    f.writelines((list_word.get(0,END)))
-    f.close()
+    if letter.get() == '': 
+        None
+    else:
+        del_word = list(list_word.curselection())
+        del_word.reverse()
+        for i in del_word:
+            list_word.delete(i)
+        with open('word_translate.txt', 'w', encoding='utf-8') as f:
+            f.writelines((list_word.get(0,END)))
+    
     
 def del_keyboard(self):# функция специально для кнопки Delete
     delite_word()
