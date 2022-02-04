@@ -1,15 +1,26 @@
+boring - скучная, скучной
 carries - нести, вынести, перенести
-defines - определяет
+charge - зарядить
+excited - рад
+flight - рейс
 guide - руководство
+heavy - тяжолый, .....ая, .......ое
 her - оно
+here is - вот, тут, здесь
 him - его
 how - как
 how - сколько
+hungry - голодный, голоден
+i need to - мне нужно
+i would like - я хотел бы
+in - в
 include - включать, входить
 is - является, происходить
+is your - Ваша, ваш, твой
 it - оно
 its - его
 list - список
+lost - потерянный, утраченый, пропавший
 make - делать
 may - может
 mine - мой
@@ -19,6 +30,8 @@ on - на
 our - наш
 out - из
 overview - обзор, анализ
+seat - место, месте
+so - так
 stash - прятать, копить, тайник
 that - тот
 their - их
@@ -27,4 +40,7 @@ there - там, здесь, туда
 these - эти
 this - этот/это
 those - те
-view - вид
+unable - не в состоянии
+view - видwhere - где
+want - хотеть
+where - где
